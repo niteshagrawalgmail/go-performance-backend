@@ -1,12 +1,15 @@
 apiVersion: v1
-kind: ServiceAccount
+kind: Namespace
 metadata:
-  name: go-performance-backend
+  name: performance
+  labels:
+    istio-injection: enabled
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: go-performance-backend
+  namespace: performance
   labels:
     app: go-performance-backend
     service: go-performance-backend
@@ -23,6 +26,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: go-performance-backend
+  namespace: performance
 spec:
   replicas: 1
   selector:
@@ -35,7 +39,6 @@ spec:
         app: go-performance-backend
         version: v1
     spec:
-      serviceAccountName: go-performance-backend
       containers:
         - image: niteshsince1982/go-performance-backend:1.0
           imagePullPolicy: IfNotPresent
